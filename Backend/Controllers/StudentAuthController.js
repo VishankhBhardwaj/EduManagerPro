@@ -1,0 +1,92 @@
+const StudentModel = require("../Models/Student");
+const {sendPasswordEmail} = require("../Nodemailer/index")
+const bcrypt = require("bcrypt");
+exports.studentInfo = async (req, res) => {
+    const { FullName, PhoneNumber, Email, Password, Gender } = req.body;
+    if (!FullName, !PhoneNumber, !Email, !Password, !Gender) {
+        return res.status(401).json({ msg: 'Please provide all details' });
+    }
+    else {
+        try {
+            const user = await StudentModel.findOne({ Email })
+            if (user) {
+                return res.status(409).json({ msg: "User already exists" });
+            }
+            else {
+                const salt = await bcrypt.genSalt(10);
+                const hash = await bcrypt.hash(Password, salt);
+                const data = new StudentModel({
+                    FullName: FullName,
+                    PhoneNumber: PhoneNumber,
+                    Email: Email,
+                    Password: hash,
+                    Gender: Gender
+                })
+                await data.save();
+                return res.status(200).json({
+                    msg: "user registered successfully"
+                })
+            }
+        } catch (err) {
+            return res.status(500).json({
+                msg: 'Server Error',
+                err: err.message || err
+            })
+        }
+    }
+}
+exports.studentLogin = async (req, res) => {
+    const { Email, Password } = req.body;
+    if (!Email || !Password) {
+        return res.status(400).json("All fields Required");
+    } else {
+        try {
+            const user = await StudentModel.findOne({ Email });
+            if (!user) {
+                return res.status(404).json({ msg: "User does not exist" })
+            } else {
+                const isMatch = await bcrypt.compare(Password, user.Password);
+                if (!isMatch) {
+                    return res.status(401).json({ msg: "Invalid Credentials" })
+                } else {
+                    return res.status(200).json({
+                        message: 'Login successful',
+                        user: {
+                            id: user._id,
+                            FullName: user.FullName,
+                            Email: user.Email,
+                        },
+                    });
+                }
+            }
+        } catch (err) {
+            return res.status(500).json({ msg: 'Server error', error: err.message || err });
+        }
+    }
+}
+
+exports.studentRecovery = async (req, res) => {
+    const { Email } = req.body;
+    if (!Email) {
+        return res.status(400).json("All fields Required");
+    } else {
+        try {
+            const isRegistered = await StudentModel.findOne({ Email })
+            if (!isRegistered) {
+                return res.status(401).json({ msg: "User not registered" })
+            } else {
+                const tempPassword = Math.random().toString(36).slice(-8);
+                const salt = await bcrypt.genSalt(10);
+                const hash = await bcrypt.hash(tempPassword, salt);
+                sendPasswordEmail(Email, tempPassword);
+                await StudentModel.findOneAndUpdate(
+                    { Email },
+                    { Password: hash }
+                );
+                return res.status(200).json({msg:"A message has been sent to your email"});
+            }
+        } catch (err) {
+            return res.status(500).json({ msg: 'Server error', error: err.message || err });
+        }
+    }
+}
