@@ -8,9 +8,12 @@ import Login from './Pages/Login'
 import StudentLogin from './Pages/StudentLogin'
 import TeacherRegister from './Pages/TeacherRegister'
 import StudentRegister from './Pages/StudentRegister'
+import Student from './Pages/Dashboard/Student/Student'
+import Teacher from './Pages/Dashboard/Teacher/Teacher'
+
 const router=createBrowserRouter([
   {
-    path:'/Home',
+    path:'/',
     element:<Home />
   },{
     path:'/Login',
@@ -27,6 +30,14 @@ const router=createBrowserRouter([
   {
     path:'StudentRegister',
     element:<StudentRegister/>
+  },
+  {
+    path:'Student',
+    element:<Student />
+  },
+  {
+    path:'Teacher',
+    element:<Teacher />
   }
 ])
 function App() {

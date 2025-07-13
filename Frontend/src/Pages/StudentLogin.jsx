@@ -40,7 +40,7 @@ const StudentLogin = () => {
             <div className='animate__animated animate__fadeIn  w-full flex flex-col p-2 h-[100vh] overflow-y-auto gap-3 md:gap-10 bg-[#e8ebee] md:items-center'>
                 <div className='md:w-[30%] w-full   flex flex-row gap-2 '>
                     <IoMdArrowBack className='text-xl relative top-[3px] text-blue-500 ' />
-                    <Link className='text-blue-500' to='/Home' onClick={() => setForgetPassword(false)}>Back To Home</Link>
+                    <Link className='text-blue-500' to='/' onClick={() => setForgetPassword(false)}>Back To Home</Link>
                 </div>
                 <div className={`${forgetPassword ? "hidden" : ""} shadow-2xl bg-white min-h-[80%] flex-1 rounded-md flex flex-col gap-3 md:gap-6 items-center md:w-[30%]`}>
                     <div className='w-full h-[15%] flex flex-row items-center justify-center'>
