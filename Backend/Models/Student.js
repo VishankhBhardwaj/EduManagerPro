@@ -8,7 +8,7 @@ const studentSchema = new mongoose.Schema({
     PhoneNumber: {
         type: String,
         required: true,
-        match: [/^[0-9]{10}$/, 'Please provide a valid phone number']
+        match: [/^[6-9]\d{9}$/, 'Please provide a valid phone number']
     },
     Email: {
         type: String,

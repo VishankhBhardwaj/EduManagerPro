@@ -24,12 +24,14 @@ const StudentLogin = () => {
             console.error('Error:', error.response?.data || error.message);
         }
     }
-    async function handleForget(){
+    async function handleForget() {
         try {
             const response = await axios.post('http://localhost:7000/api/student/recovery', {
                 Email: Email
             });
+            localStorage.setItem('token', response.data.token);
             toast(response.data.msg);
+            navigate('/Student');
         } catch (error) {
             toast(error.response?.data?.msg || error.message || "An error occurred");
             console.error('Error:', error.response?.data || error.message);
@@ -99,15 +101,15 @@ const StudentLogin = () => {
                     <div className='w-full flex flex-col gap-2'>
                         <label htmlFor="">Student ID/Email ID</label>
                         <input
-                        value={Email}
-                        onChange={(e)=>setEmail(e.target.value)}
-                        type="text" className='border border-gray-300 p-2 rounded-md' placeholder='Enter Your Student Id' />
+                            value={Email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            type="text" className='border border-gray-300 p-2 rounded-md' placeholder='Enter Your Student Id' />
                     </div>
                     <div className='w-full border-t pt-4'>
                         <button onClick={handleForget} className='w-full py-2 rounded-md bg-green-600 text-white hover:bg-green-700 transition-all duration-200'>
                             Submit
                         </button>
-                        <ToastContainer/>
+                        <ToastContainer />
                     </div>
                 </div>
 

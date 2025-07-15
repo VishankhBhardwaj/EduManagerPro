@@ -6,7 +6,7 @@ import 'animate.css';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 const TeacherRegister = () => {
     const [fullName, setFullName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -14,7 +14,7 @@ const TeacherRegister = () => {
     const [password, setPassword] = useState('');
     const [gender, setGender] = useState('');
     const [picture, setPicture] = useState(null);
-
+    const navigate = useNavigate(); 
     async function HandleRegister() {
         try {
             const response = await axios.post('http://localhost:7000/api/teacher/register', {
@@ -25,7 +25,9 @@ const TeacherRegister = () => {
                 Gender: gender,
                 ProfilePic: picture
             })
-            toast.success(response.data.msg)
+            localStorage.setItem('token', response.data.token);
+            toast(response.data.msg);
+            navigate('/Teacher');
         } catch (error) {
             toast(error.response?.data?.msg || error.message || "An error occurred");
             console.error('Error:', error.response?.data || error.message);

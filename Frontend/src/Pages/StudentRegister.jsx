@@ -5,7 +5,7 @@ import { PiStudentThin } from "react-icons/pi";
 import 'animate.css';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const StudentRegister = () => {
@@ -15,6 +15,7 @@ const StudentRegister = () => {
     const [password, setPassword] = useState('');
     const [gender, setGender] = useState('');
     const [picture, setPicture] = useState(null);
+    const navigate = useNavigate();
     const handleFilechange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -34,7 +35,9 @@ const StudentRegister = () => {
                 Gender: gender,
                 ProfilePicture: picture,
             })
+            localStorage.setItem('token', response.data.token);
             toast(response.data.msg);
+            navigate('/Student');
         } catch (error) {
             toast(error.response?.data?.err || error.message || "An error occurred");
             console.error('Error:', error.response?.data || error.message);

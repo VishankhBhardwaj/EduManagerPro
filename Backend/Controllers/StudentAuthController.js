@@ -1,5 +1,6 @@
 const StudentModel = require("../Models/Student");
-const {sendPasswordEmail} = require("../Nodemailer/index")
+const { sendPasswordEmail } = require("../Nodemailer/index")
+const jwt = require('jsonwebtoken')
 const bcrypt = require("bcrypt");
 exports.studentInfo = async (req, res) => {
     const { FullName, PhoneNumber, Email, Password, Gender } = req.body;
@@ -23,8 +24,20 @@ exports.studentInfo = async (req, res) => {
                     Gender: Gender
                 })
                 await data.save();
+                const token = jwt.sign(
+                    { userId: data._id },
+                    process.env.JWT_SECRET,
+                    { expiresIn: '7d' }
+                );
                 return res.status(200).json({
-                    msg: "user registered successfully"
+                    success: true,
+                    msg: "user registered successfully",
+                    token,                           // send token to frontend
+                    user: {
+                        id: data._id,
+                        name: data.FullName,
+                        email: data.Email,
+                    }
                 })
             }
         } catch (err) {
@@ -49,14 +62,21 @@ exports.studentLogin = async (req, res) => {
                 if (!isMatch) {
                     return res.status(401).json({ msg: "Invalid Credentials" })
                 } else {
+                    const token = jwt.sign(
+                        { userId: user._id },
+                        process.env.JWT_SECRET,
+                        { expiresIn: '7d' }
+                    );
                     return res.status(200).json({
-                        message: 'Login successful',
+                        success: true,
+                        msg: "user registered successfully",
+                        token,                          
                         user: {
                             id: user._id,
-                            FullName: user.FullName,
-                            Email: user.Email,
-                        },
-                    });
+                            name: user.FullName,
+                            email: user.Email,
+                        }
+                    })
                 }
             }
         } catch (err) {
@@ -83,7 +103,7 @@ exports.studentRecovery = async (req, res) => {
                     { Email },
                     { Password: hash }
                 );
-                return res.status(200).json({msg:"A message has been sent to your email"});
+                return res.status(200).json({ msg: "A message has been sent to your email" });
             }
         } catch (err) {
             return res.status(500).json({ msg: 'Server error', error: err.message || err });

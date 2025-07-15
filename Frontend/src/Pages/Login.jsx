@@ -4,12 +4,13 @@ import { IoMdArrowBack } from "react-icons/io";
 import { PiStudentThin } from "react-icons/pi";
 import 'animate.css';
 import { useState } from 'react';
-import { ToastContainer,toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [Email, setEmail] = useState('')
     const [Password, setPassword] = useState('')
-
+    const navigate = useNavigate();
 
     async function HandleSignIn() {
         try {
@@ -17,7 +18,9 @@ const Login = () => {
                 Email: Email,
                 Password: Password
             });
-            toast(response.data.message);
+            localStorage.setItem('token', response.data.token);
+            toast(response.data.msg);
+            navigate('/Teacher');
         } catch (error) {
             toast(error.response?.data?.msg || error.message || "An error occurred");
             console.error('Error:', error.response?.data || error.message);

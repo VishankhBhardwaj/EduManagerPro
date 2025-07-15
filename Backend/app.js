@@ -9,9 +9,13 @@ require('../Backend/db/config');
 const PORT=process.env.PORT;
 const studentroute=require('./Routes/StudentAuthenticationRoute');
 const teacherRoute = require('./Routes/TeacherAuthenticationRoute');
+const teacherScheduleRoute = require('./Routes/TeacherScheduleRoute');
 app.use('/api/student', studentroute);
 app.use('/api/teacher', teacherRoute);
-
+app.use('/api/addSchedule',teacherScheduleRoute);
+app.use('/api/showSchedule',teacherScheduleRoute);
+app.use('/api/showTeacherData',teacherScheduleRoute);
+app.use('/api/updateTeacherData',teacherScheduleRoute)
 app.listen(PORT || 5000, () => {
     console.log("Server is running on port", PORT || 5000);
 });
