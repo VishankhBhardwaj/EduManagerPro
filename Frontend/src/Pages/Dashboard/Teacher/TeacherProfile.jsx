@@ -6,7 +6,6 @@ const TeacherProfile = () => {
     const [isEditable, setIsEditable] = useState(false);
     const [teacherInfo, setTeacherInfo] = useState({});
     const [updatedInfo, setUpdatedInfo] = useState({});
-
     async function handleSave() {
         try {
             const token = localStorage.getItem('token');
@@ -25,7 +24,6 @@ const TeacherProfile = () => {
             console.error('Error saving teacher data:', err);
         }
     }
-
     useEffect(() => {
         const fetchData = async () => {
             const token = localStorage.getItem('token');

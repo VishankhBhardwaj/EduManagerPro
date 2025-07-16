@@ -11,7 +11,7 @@ const Student = () => {
     return (
         <div className='bg-[#f9fafb]'>
             <Navbar />
-            <div className='border-2 border-red-400 w-full min-h-screen p-4 flex flex-col space-y-3 md:p-10'>
+            <div className='w-full min-h-screen p-4 flex flex-col space-y-3 md:p-10'>
                 <div className='w-full flex flex-row bg-[#f4f4f5] rounded-md border-2 border-green-300'>
                     <ul className='flex flex-row gap-2 justify-evenly p-1 w-full'>
                         <li

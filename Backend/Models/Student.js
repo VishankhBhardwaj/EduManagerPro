@@ -30,7 +30,27 @@ const studentSchema = new mongoose.Schema({
     ProfilePic: {
         type: String,
         default: 'https://www.w3schools.com/howto/img_avatar.png'
-    }
+    },
+    Grade: {
+        type: String,
+        default: '',
+    },
+    DOB: {
+        type: Date,
+        default: '',
+    },
+    GuardianName: {
+        type: String,
+        default: '',
+    },
+    Address: {
+        type: String,
+        default: '',
+    },
+    Subjects: [{
+        type: [String],
+        default: [],
+    }]
 }, { timestamps: true })
 
 module.exports = mongoose.model("student", studentSchema);

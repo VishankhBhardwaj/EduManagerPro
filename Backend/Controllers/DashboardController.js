@@ -1,5 +1,6 @@
 const TeacherScheduleModel = require('../Models/TeacherSchedule');
 const Teacher = require('../Models/Teacher');
+const studentModel = require('../Models/Student');
 exports.Schedule = async (req, res) => {
     const { Day, SubjectName, StartTime, EndTime } = req.body;
     const Teacher = req.userId;
@@ -26,7 +27,7 @@ exports.Schedule = async (req, res) => {
 }
 exports.AllSchedule = async (req, res) => {
     try {
-        const data = await TeacherScheduleModel.find().populate('Teacher');
+        const data = await TeacherScheduleModel.find().populate('Teacher','-Password');
         return res.status(200).json(data);
     } catch (err) {
         return res.status(500).json({
@@ -75,9 +76,58 @@ exports.UpdateTeacherData = async (req, res) => {
             return res.status(404).json({ msg: "Teacher not found" });
         }
         if (updatedTeacher) {
-            updatedTeacher.password = undefined;
+            updatedTeacher.Password = undefined;
         }
         return res.status(200).json({ msg: "Teacher data updated successfully", data: updatedTeacher });
+    } catch (err) {
+        return res.status(500).json({
+            msg: 'Server Error',
+            err: err.message || err
+        });
+    }
+}
+exports.studentData = async (req, res) => {
+    const studentId = req.userId;
+    try {
+        const data = await studentModel.findById(studentId).select('-Password');
+        if (!data) {
+            return res.status(404).json({ msg: "Student not found" });
+        }
+        return res.status(200).json(data);
+    } catch (err) {
+        return res.status(500).json({
+            msg: 'Server Error',
+            err: err.message || err
+        });
+    }
+}
+exports.UpdateStudentData = async (req, res) => {
+    const studentId = req.userId;
+    const { FullName, Email, PhoneNumber, DOB, GuardianName, Grade, Address } = req.body;
+    if (!FullName || !Email || !PhoneNumber || !DOB || !GuardianName || !Grade || !Address) {
+        return res.status(400).json({ msg: "All fields are required" });
+    }
+    try {
+        const updatedStudent = await studentModel.findByIdAndUpdate(
+            studentId,
+            {
+                FullName,
+                Email,
+                PhoneNumber,
+                DOB,
+                GuardianName,
+                Grade,
+                Address
+            },
+            { new: true }
+        );
+        if (!updatedStudent) {
+            return res.status(404).json({ msg: "Student not found" });
+        }
+        if (updatedStudent) {
+            updatedStudent.Password = undefined;
+        }
+        return res.status(200).json({ msg: "Student data updated successfully", data: updatedStudent });
     } catch (err) {
         return res.status(500).json({
             msg: 'Server Error',

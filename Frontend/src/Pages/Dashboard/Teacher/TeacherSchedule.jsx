@@ -51,7 +51,7 @@ const TeacherSchedule = () => {
             }
         };
         fetchData();
-    }, [AllSchedules]);
+    }, []);
 
     return (
         <>

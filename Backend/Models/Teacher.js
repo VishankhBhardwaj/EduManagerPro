@@ -31,7 +31,6 @@ const teacherSchema = new mongoose.Schema({
     type: String,
     default: 'https://www.w3schools.com/howto/img_avatar.png',
   },
-
   Department: {
     type: String,
     default: '',
@@ -45,7 +44,7 @@ const teacherSchema = new mongoose.Schema({
     default: '',
   },
   SubjectsTeaching: {
-    type: [String], // Array of subject strings
+    type: [String], 
     default: [],
   },
 }, { timestamps: true });

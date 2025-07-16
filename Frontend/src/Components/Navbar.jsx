@@ -3,6 +3,7 @@ import { Navigate,useNavigate } from 'react-router-dom'
 import 'animate.css'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 const Navbar = () => {
         const navigate = useNavigate()
         const [loggedIn,setLoggedIn] = useState(false);
@@ -17,7 +18,7 @@ const Navbar = () => {
 return (
         <div className='w-full h-[70px] bg-white flex flex-row justify-between p-2 gap-2 shadow-xl md:p-3 backdrop-blur-large animate__animated animate__fadeInDown'>
                 <div className=" text-xl bg-gradient-to-r from-blue-600 to-green-500 text-transparent bg-clip-text font-bold w-[30%] md:w-[50%] md:text-4xl">
-                        <h1 className='md:ml-[70px]'>EduManage Pro</h1>
+                        <Link to='/'><h1 className='md:ml-[70px]'>EduManage Pro</h1></Link>
                 </div>
                 <div className="flex flex-row gap-2 w-[70%] md:w-[50%] ml-auto">
                         {!loggedIn ? (
@@ -36,16 +37,20 @@ return (
                                         </button>
                                 </>
                         ) : (
-                                <button
-                                        onClick={() => {
-                                                localStorage.removeItem('token');
-                                                setLoggedIn(false);
-                                                navigate('/');
-                                        }}
-                                        className='bg-gradient-to-r from-blue-600 to-green-500  text-white w-[70%] md:w-[30%] rounded-md shadow-md hover:opacity-90 transition-all duration-200 hover:shadow-2xl ml-auto'
-                                >
-                                        Logout
-                                </button>
+                                <>
+                                        <button onClick={()=>navigate('/Teacher')} className='bg-gradient-to-r from-blue-600 to-green-500  text-white w-[70%] md:w-[30%] rounded-md shadow-md hover:opacity-90 transition-all duration-200 hover:shadow-2xl lg:ml-[300px]'
+                                        >Dashboard</button>
+                                        <button
+                                                onClick={() => {
+                                                        localStorage.removeItem('token');
+                                                        setLoggedIn(false);
+                                                        navigate('/');
+                                                }}
+                                                className='bg-gradient-to-r from-blue-600 to-green-500  text-white w-[70%] md:w-[30%] rounded-md shadow-md hover:opacity-90 transition-all duration-200 hover:shadow-2xl ml-auto'
+                                        >
+                                                Logout
+                                        </button>
+                                </>
                         )}
                 </div>
         </div>

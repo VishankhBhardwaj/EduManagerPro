@@ -1,9 +1,6 @@
 const express = require("express")
 const router=express.Router();
-const {Schedule} = require('../Controllers/TeacherScheduleController');
-const {AllSchedule} = require('../Controllers/TeacherScheduleController');
-const {teacherData} = require('../Controllers/TeacherScheduleController');
-const {UpdateTeacherData} = require('../Controllers/TeacherScheduleController');
+const { Schedule, AllSchedule, teacherData, UpdateTeacherData } = require('../Controllers/DashboardController');
 const verifyToken = require('../Middleware/verifyToken');
 
 router.post('/schedule',verifyToken,Schedule);
