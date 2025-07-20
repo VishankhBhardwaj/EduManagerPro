@@ -31,7 +31,7 @@ const Teacher = () => {
                         >
                             <div className="flex items-center justify-center gap-2">
                                 <FaBook />
-                                Courses
+                                MyStudents
                             </div>
                         </li>
                         <li

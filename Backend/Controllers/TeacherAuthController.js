@@ -32,7 +32,7 @@ exports.teacherInfo = async (req, res) => {
                 return res.status(200).json({
                     success: true,
                     msg: "user registered successfully",
-                    token,                           // send token to frontend
+                    token,                          
                     user: {
                         id: data._id,
                         name: data.FullName,

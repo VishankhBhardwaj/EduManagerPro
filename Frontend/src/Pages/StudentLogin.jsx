@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { IoMdArrowBack } from "react-icons/io";
 import { PiStudentThin } from "react-icons/pi";
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'animate.css';
 
 const StudentLogin = () => {
+    const navigate = useNavigate();
     const [forgetPassword, setForgetPassword] = useState(false);
     const [Password, setPassword] = useState('');
     const [Email, setEmail] = useState('');
@@ -18,7 +19,9 @@ const StudentLogin = () => {
                 Email: Email,
                 Password: Password
             });
+            localStorage.setItem('token', response.data.token);
             toast(response.data.message);
+            navigate('/student')
         } catch (error) {
             toast(error.response?.data?.msg || error.message || "An error occurred");
             console.error('Error:', error.response?.data || error.message);

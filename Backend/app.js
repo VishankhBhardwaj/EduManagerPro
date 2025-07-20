@@ -17,8 +17,11 @@ app.use('/api/addSchedule',teacherScheduleRoute);
 app.use('/api/showSchedule',teacherScheduleRoute);
 app.use('/api/showTeacherData',teacherScheduleRoute);
 app.use('/api/updateTeacherData',teacherScheduleRoute);
+app.use('/api/requests',teacherScheduleRoute);
 app.use('/api/showStudentData',studentDataRoute);
 app.use('/api/updateStudentData',studentDataRoute);
+app.use('/api/showTeachersData',studentDataRoute);
+app.use('/api/studyrequest',studentDataRoute);
 app.listen(PORT || 5000, () => {
     console.log("Server is running on port", PORT || 5000);
 });

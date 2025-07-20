@@ -1,6 +1,7 @@
 const TeacherScheduleModel = require('../Models/TeacherSchedule');
 const Teacher = require('../Models/Teacher');
 const studentModel = require('../Models/Student');
+const StudyRequest = require('../Models/StudyRequest');
 exports.Schedule = async (req, res) => {
     const { Day, SubjectName, StartTime, EndTime } = req.body;
     const Teacher = req.userId;
@@ -27,7 +28,7 @@ exports.Schedule = async (req, res) => {
 }
 exports.AllSchedule = async (req, res) => {
     try {
-        const data = await TeacherScheduleModel.find().populate('Teacher','-Password');
+        const data = await TeacherScheduleModel.find().populate('Teacher', '-Password');
         return res.status(200).json(data);
     } catch (err) {
         return res.status(500).json({
@@ -134,4 +135,78 @@ exports.UpdateStudentData = async (req, res) => {
             err: err.message || err
         });
     }
+}
+exports.AllTeachers = async (req, res) => {
+    try {
+        const data = await Teacher.find().select('-Password');
+        return res.status(200).json({
+            msg: "Fetched all teachers successfully",
+            data: data
+        })
+    } catch (error) {
+        return res.status(500).json({
+            msg: 'Server Error',
+            err: error.message || error
+        });
+    }
+}
+exports.StudyRequests = async (req, res) => {
+    try {
+        const studentId = req.userId;
+        const { teacherId } = req.body;
+        if (!teacherId) {
+            return res.status(400).json("Teacher Id not found");
+        }
+        const data = new StudyRequest({
+            studentId: studentId,
+            teacherId: teacherId
+        })
+        await data.save();
+        return res.status(200).json("Request send successfully");
+    } catch (error) {
+        return res.status(500).json({
+            msg: 'Server Error',
+            err: error.message || error
+        });
+    }
+}
+exports.FetchStudyRequests = async (req, res) => {
+    try {
+        const teacherId = req.userId;
+        const data = await StudyRequest.find({ teacherId }).populate('studentId', '-Password');
+        if (!data) {
+            return res.status(404).json({ msg: "Study request not found" });
+        }
+        return res.status(200).json(data);
+    } catch (error) {
+        return res.status(500).json({
+            msg: 'Server Error',
+            err: error.message || error
+        });
+    }
+}
+exports.ApproveStudyRequests = async (req, res) => {
+    try {
+        const teacherId = req.userId;
+        const { approval, studentId } = req.body;
+        if (!studentId || typeof approval === 'undefined') {
+            return res.status(400).json({ msg: "Student ID and Approval status are required" });
+        }
+        const status = approval === true ? 'accepted' : 'rejected';
+        const data = await StudyRequest.findOneAndUpdate(
+            { studentId: studentId, teacherId: teacherId },
+            { status: status },
+            { new: true }
+        );
+        if (!data) {
+            return res.status(404).json({ msg: "Study request not found" });
+        }
+        return res.status(200).json({ msg: "Study request updated successfully", data });
+    } catch (error) {
+        return res.status(500).json({
+            msg: 'Server Error',
+            err: error.message || error
+        });
+    }
+
 }

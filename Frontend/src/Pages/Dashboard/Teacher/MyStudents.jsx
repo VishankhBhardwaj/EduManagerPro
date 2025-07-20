@@ -1,30 +1,36 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import { FaRegTrashCan } from "react-icons/fa6";
+import { IoMdCheckmark } from "react-icons/io";
+import { RxCross1 } from "react-icons/rx";
 
 const MyStudents = () => {
-    const students = [
-        {
-            id: "STU2024002",
-            name: "Emma Davis",
-            grade: "Grade 11",
-            email: "emma.davis@school.edu",
-            courses: ["Advanced Mathematics", "Statistics"],
-        },
-        {
-            id: "STU2024003",
-            name: "Michael Brown",
-            grade: "Grade 10",
-            email: "michael.brown@school.edu",
-            courses: ["Mathematics", "Calculus"],
-        },
-        {
-            id: "STU2024004",
-            name: "Lisa Wilson",
-            grade: "Grade 12",
-            email: "lisa.wilson@school.edu",
-            courses: ["Calculus", "Statistics"],
-        },
-    ];
+    const [request, setRequest] = useState([]);
+
+    const handleApproval = async (approval,studentId)=>{
+        try{
+            const token = localStorage.getItem('token');
+            const res = axios.post('http://localhost:7000/api/requests/approval',{approval,studentId},{headers:{Authorization:`Bearer ${token}`}});
+            console.log(res.data);
+        }catch(error){
+            console.log(error.message);
+        }
+    }
+    useEffect(() => {
+        const fetchRequests = async () => {
+            try {
+                const res = await axios.get('http://localhost:7000/api/requests/fetchRequests', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                setRequest(res.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+        fetchRequests();
+    }, []);
     return (
         <div className='flex flex-col p-3 gap-4 w-full h-full bg-white rounded-md shadow-2xl animate__animated animate__fadeIn'>
             <div className="bg-white rounded-xl shadow p-6  mx-auto w-full">
@@ -33,9 +39,6 @@ const MyStudents = () => {
                         <h1 className="text-2xl font-bold">My Students</h1>
                         <p className="text-gray-500 text-sm">Students under your supervision</p>
                     </div>
-                    <button className="bg-black text-white px-4 py-2 rounded-lg flex items-center hover:bg-gray-800">
-                        <span className="text-xl mr-2">+</span> Add Student
-                    </button>
                 </div>
 
                 <div className="grid grid-cols-5 font-semibold text-gray-500 border-b pb-2 mb-2">
@@ -45,34 +48,45 @@ const MyStudents = () => {
                     <div>Courses</div>
                     <div className="text-center">Actions</div>
                 </div>
-                {students.map((student) => (
-                    <div key={student.id} className="grid grid-cols-5 items-center py-4 border-b">
-                        <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-full bg-gray-200" />
-                            <div>
-                                <div className="font-semibold text-gray-900">{student.name}</div>
-                                <div className="text-xs text-gray-500">{student.id}</div>
+                {request
+                    .filter(student => student.status === 'pending')
+                    .map((student, index) => (
+                        <div key={index} className="flex flex-col gap-1 md:gap-2 md:grid md:grid-cols-5 items-center py-1 md:py-4 border-b  border-2 border-gray-300 rounded-md md:border-none">
+                            <div className="flex flex-col md:flex-row items-center gap-3">
+                                <div className="h-10 w-10 rounded-full">
+                                    <img src={student.studentId.ProfilePic || '/pp.jpeg'} alt="" className='h-full w-full rounded-full' />
+                                </div>
+                                <div>
+                                    <div className="font-semibold text-gray-900">{student.studentId.FullName}</div>
+                                    <div className="text-xs text-gray-500">{student.studentId.id}</div>
+                                </div>
+                            </div>
+                            <div>{student.studentId.Grade}</div>
+                            <div className="text-sm">{student.studentId.Email}</div>
+                            <div className="flex flex-wrap gap-3 md:gap-2">
+                                {student && student.studentId.Subject && student.studentId.Subject.length > 0 && (
+                                    student.studentId.Subject.map((course, index) => (
+                                        <span
+                                            key={index}
+                                            className="bg-gray-100 text-sm px-2 py-1 rounded-full text-gray-700"
+                                        >
+                                            {course}
+                                        </span>
+                                    ))
+                                )}
+                            </div>
+                            <div className="flex justify-center gap-3">
+                                <button onClick={()=>handleApproval(true)} className="bg-white hover:bg-gray-200 transition-all shadow-md hover:shadow-3xl duration-200 text-black border border-gray-400 px-6 py-2 rounded-lg flex flex-row justify-evenly items-center">
+                                    <IoMdCheckmark />
+                                    Accept
+                                </button>
+                                <button onClick={()=>handleApproval(false,student.studentId._id)} className="bg-red-500 hover:bg-red-400 shadow-md hover:shadow-3xl transition-all duration-200 text-white px-6 py-2 rounded-lg flex flex-row justify-evenly items-center">
+                                    <RxCross1 />
+                                    Reject
+                                </button>
                             </div>
                         </div>
-                        <div>{student.grade}</div>
-                        <div className="text-sm">{student.email}</div>
-                        <div className="flex flex-wrap gap-2">
-                            {student.courses.map((course, index) => (
-                                <span
-                                    key={index}
-                                    className="bg-gray-100 text-sm px-2 py-1 rounded-full text-gray-700"
-                                >
-                                    {course}
-                                </span>
-                            ))}
-                        </div>
-                        <div className="flex justify-center">
-                            <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg">
-                                <FaRegTrashCan />
-                            </button>
-                        </div>
-                    </div>
-                ))}
+                    ))}
             </div>
         </div>
     )

@@ -69,7 +69,7 @@ exports.studentLogin = async (req, res) => {
                     );
                     return res.status(200).json({
                         success: true,
-                        msg: "user registered successfully",
+                        msg: "user loggedin successfully",
                         token,                          
                         user: {
                             id: user._id,
