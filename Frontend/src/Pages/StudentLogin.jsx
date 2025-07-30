@@ -21,7 +21,7 @@ const StudentLogin = () => {
             });
             localStorage.setItem('token', response.data.token);
             toast(response.data.message);
-            navigate('/student')
+            navigate('/Student')
         } catch (error) {
             toast(error.response?.data?.msg || error.message || "An error occurred");
             console.error('Error:', error.response?.data || error.message);

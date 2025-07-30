@@ -1,9 +1,9 @@
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 const teacherScheduleSchema = new mongoose.Schema({
     Teacher: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Teacher',
-        required:true
+        required: true
     },
     Day: {
         type: String,
@@ -13,6 +13,10 @@ const teacherScheduleSchema = new mongoose.Schema({
     SubjectName: {
         type: String,
         required: true
+    },
+    attendancetaken: {
+        type: Boolean,
+        default: false
     },
     StartTime: {
         type: String,

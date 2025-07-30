@@ -5,20 +5,26 @@ import axios from 'axios';
 
 const Teachers = () => {
     const [teachersInfo, setTeachersInfo] = useState([]);
-    
-    const handleSubmitRequest = async(teacherId)=>{
+    const [sendedRequest, setSendedRequest] = useState([]);
+    const [alreadySendedRequest, setAlreadySendedRequest] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    useEffect(() => {
+        console.log(alreadySendedRequest);
+    }, [alreadySendedRequest]);
+    const handleSubmitRequest = async (teacherId) => {
         try {
             const token = localStorage.getItem('token');
             const res = await axios.post(
-            "http://localhost:7000/api/studyrequest/request",
-            { teacherId },
-            {
-                headers: {
-                Authorization: `Bearer ${token}`
+                "http://localhost:7000/api/studyrequest/request",
+                { teacherId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }
-            }
             );
             console.log(res.data);
+            setSendedRequest(prev => [...prev, teacherId]);
         } catch (error) {
             console.log(error.message);
         }
@@ -34,6 +40,16 @@ const Teachers = () => {
             setTeachersInfo(res.data.data);
         }
         fetchData();
+        const fetchRequestStatus = async () => {
+            const token = localStorage.getItem('token');
+            const res = await axios.get('http://localhost:7000/api/studyrequest/sendedRequest', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            setAlreadySendedRequest(res.data);
+        }
+        fetchRequestStatus();
     }, []);
     return (
         <div className='flex flex-col p-3 gap-4 w-full h-full bg-white rounded-md shadow-2xl animate__animated animate__fadeIn'>
@@ -43,9 +59,23 @@ const Teachers = () => {
                     <p className='text-lg text-gray-400 md:text-2xl'>Send a request to study with a teacher</p>
                 </div>
             </div>
+            <input
+                type="text"
+                placeholder="Search by name or email"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border px-4 py-2 rounded-md w-full md:w-[50%] outline-none mb-2"
+            />
+
             {
                 teachersInfo && teachersInfo.length > 0 ? (
-                    teachersInfo.map((teacher, index) => (
+                    teachersInfo.filter((teacher) =>
+                        teacher.FullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        teacher.Email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        teacher.SubjectsTeaching.some(subject =>
+                            subject.toLowerCase().includes(searchTerm.toLowerCase())
+                        )
+                    ).map((teacher, index) => (
                         <div key={index} className="flex flex-row justify-between gap-4 p-2 bg-white rounded-lg shadow-md w-full md:p-4 border border-gray-500">
                             <div className='flex flex-row gap-2 md:gap-4'>
                                 <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm">
@@ -64,10 +94,37 @@ const Teachers = () => {
                                 </div>
                             </div>
                             <div className='flex flex-row justify-between items-center'>
-                                <button onClick={()=>handleSubmitRequest(teacher._id)} className='bg-black text-white w-[100px] md:w-[170px] md:h-[40px] hover:rounded-tr-none hover:shadow-2xl hover:bg-zinc-800 transition-all duration-200 p-2 text-xs md:text-lg flex flex-row rounded-md justify-evenly items-center'>
-                                    <BsSend />
-                                    <span className="ml-2">Send Request</span>
-                                </button>
+                                {alreadySendedRequest.some(item => item.teacherId._id === teacher._id) || sendedRequest.includes(teacher._id) ? (() => {
+                                    const matched = alreadySendedRequest.find(item => item.teacherId._id === teacher._id);
+                                    const status = matched ? matched.status : 'Request Sent';
+
+                                    return (
+                                        <div className='flex flex-col md:flex-row gap-3'>
+                                            <button className="bg-gray-100 text-black font-semibold text-sm px-3 rounded-full">
+                                                {status}
+                                            </button>
+
+                                            {status === 'rejected' && (
+                                                <button
+                                                    onClick={() => handleSubmitRequest(teacher._id)}
+                                                    className="bg-black text-white w-[100px] md:w-[170px] md:h-[50px] hover:rounded-tr-none hover:shadow-2xl hover:bg-zinc-800 transition-all duration-200 p-2 text-xs md:text-lg flex flex-row rounded-md justify-evenly items-center"
+                                                >
+                                                    <BsSend />
+                                                    <span className="ml-2">Send Request Again</span>
+                                                </button>
+                                            )}
+                                        </div>
+                                    );
+                                })() : (
+                                    <button
+                                        onClick={() => handleSubmitRequest(teacher._id)}
+                                        className="bg-black text-white w-[100px] md:w-[170px] md:h-[40px] hover:rounded-tr-none hover:shadow-2xl hover:bg-zinc-800 transition-all duration-200 p-2 text-xs md:text-lg flex flex-row rounded-md justify-evenly items-center"
+                                    >
+                                        <BsSend />
+                                        <span className="ml-2">Send Request</span>
+                                    </button>
+                                )}
+
                             </div>
                         </div>
                     ))

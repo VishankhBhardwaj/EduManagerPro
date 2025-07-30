@@ -16,7 +16,7 @@ const Navbar = () => {
                 }
         })
 return (
-        <div className='w-full h-[70px] bg-white flex flex-row justify-between p-2 gap-2 shadow-xl md:p-3 backdrop-blur-large animate__animated animate__fadeInDown'>
+        <div className='w-full h-[70px] bg-white/10 backdrop-blur-2xl flex flex-row justify-between p-2 gap-2 shadow-xl md:p-3 backdrop-blur-large animate__animated animate__fadeInDown'>
                 <div className=" text-xl bg-gradient-to-r from-blue-600 to-green-500 text-transparent bg-clip-text font-bold w-[30%] md:w-[50%] md:text-4xl">
                         <Link to='/'><h1 className='md:ml-[70px]'>EduManage Pro</h1></Link>
                 </div>

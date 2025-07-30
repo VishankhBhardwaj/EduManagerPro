@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Navbar from '../../../Components/navbar'
+import Navbar from '../../../Components/Navbar'
 import Profile from './Profile';
 import Courses from './Courses';
 import Schedule from './Schedule';
@@ -16,7 +16,7 @@ const Student = () => {
             <Navbar />
             <div className='w-full min-h-screen p-4 flex flex-col space-y-3 md:p-10'>
                 <div className='w-full flex flex-row bg-[#f4f4f5] rounded-md border-2 border-green-300'>
-                    <ul className='flex flex-row flex-1 flex-wrap gap-2 justify-evenly p-1 w-full'>
+                    <ul className='flex flex-row flex-1 flex-wrap md:flex-nowrap gap-2 justify-evenly p-1 w-full'>
                         <li
                             onClick={() => setTab('Profile')}
                             className={`p-2 w-[30%] md:w-[35%] text-center font-bold rounded-lg text-gray-500 cursor-pointer transition-all duration-200 ${tab === 'Profile' ? 'bg-white shadow-xl text-green-400' : 'bg-[#f4f4f5]'

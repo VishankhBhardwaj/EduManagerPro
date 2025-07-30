@@ -5,32 +5,27 @@ import { IoMdCheckmark } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 
 const MyStudents = () => {
-    const [request, setRequest] = useState([]);
 
-    const handleApproval = async (approval,studentId)=>{
-        try{
-            const token = localStorage.getItem('token');
-            const res = axios.post('http://localhost:7000/api/requests/approval',{approval,studentId},{headers:{Authorization:`Bearer ${token}`}});
-            console.log(res.data);
-        }catch(error){
-            console.log(error.message);
-        }
-    }
+    const [request, setRequest] = useState([]);
+    const [attendanceRecord, setAttendanceRecord] = useState([]);
+    
     useEffect(() => {
-        const fetchRequests = async () => {
+        const fetchAttendence = async () => {
             try {
-                const res = await axios.get('http://localhost:7000/api/requests/fetchRequests', {
+                const res = await axios.get('http://localhost:7000/api/attendance/attendanceDetails', {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
-                });
-                setRequest(res.data);
+                })
+                console.log(res.data.data)
+                setAttendanceRecord(res.data.data);
             } catch (error) {
                 console.log(error.message);
             }
         }
-        fetchRequests();
+        fetchAttendence();
     }, []);
+    
     return (
         <div className='flex flex-col p-3 gap-4 w-full h-full bg-white rounded-md shadow-2xl animate__animated animate__fadeIn'>
             <div className="bg-white rounded-xl shadow p-6  mx-auto w-full">
@@ -41,14 +36,26 @@ const MyStudents = () => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-5 font-semibold text-gray-500 border-b pb-2 mb-2">
-                    <div>Student</div>
-                    <div>Grade</div>
-                    <div>Email</div>
-                    <div>Courses</div>
-                    <div className="text-center">Actions</div>
+                <div className="grid grid-cols-4 font-semibold text-gray-500 border-b pb-2 mb-2">
+                    <div className='text-center text-xs md:text-xl'>Student</div>
+                    <div className='text-center text-xs md:text-xl'>Grade</div>
+                    <div className='text-center text-xs md:text-xl'>Email</div>
+                    <div className='text-center text-xs md:text-xl'>Present</div>
                 </div>
-                {request
+                {
+                    attendanceRecord.map((record, index) => (
+                        <div key={index} className="grid grid-cols-4 font-semibold text-gray-500 border-b pb-2 mb-2">
+                            <div className='text-center text-xs whitespace-nowrap md:text-xl sm:break-words sm:max-w-[150px] md:max-w-[450px]'>{record.student.FullName || 'N/A'}</div>
+                            <div className='text-center text-xs md:text-xl'>{record.student.Grade || 'N/A'}</div>
+                            <div className='text-center text-xs md:text-xl whitespace-nowrap  sm:break-words sm:max-w-[150px] md:max-w-[450px]'>
+                                {record.student.Email || 'N/A'}
+                            </div>
+
+                            <div className='text-center text-xs md:text-xl'>{record.present || 'N/A'}</div>
+                        </div>
+                    ))
+                }
+                {/* {request
                     .filter(student => student.status === 'pending')
                     .map((student, index) => (
                         <div key={index} className="flex flex-col gap-1 md:gap-2 md:grid md:grid-cols-5 items-center py-1 md:py-4 border-b  border-2 border-gray-300 rounded-md md:border-none">
@@ -76,17 +83,17 @@ const MyStudents = () => {
                                 )}
                             </div>
                             <div className="flex justify-center gap-3">
-                                <button onClick={()=>handleApproval(true)} className="bg-white hover:bg-gray-200 transition-all shadow-md hover:shadow-3xl duration-200 text-black border border-gray-400 px-6 py-2 rounded-lg flex flex-row justify-evenly items-center">
+                                <button onClick={() => handleApproval(true, student.studentId._id)} className="bg-white hover:bg-gray-200 transition-all shadow-md hover:shadow-3xl duration-200 text-black border border-gray-400 px-6 py-2 rounded-lg flex flex-row justify-evenly items-center">
                                     <IoMdCheckmark />
                                     Accept
                                 </button>
-                                <button onClick={()=>handleApproval(false,student.studentId._id)} className="bg-red-500 hover:bg-red-400 shadow-md hover:shadow-3xl transition-all duration-200 text-white px-6 py-2 rounded-lg flex flex-row justify-evenly items-center">
+                                <button onClick={() => handleApproval(false, student.studentId._id)} className="bg-red-500 hover:bg-red-400 shadow-md hover:shadow-3xl transition-all duration-200 text-white px-6 py-2 rounded-lg flex flex-row justify-evenly items-center">
                                     <RxCross1 />
                                     Reject
                                 </button>
                             </div>
                         </div>
-                    ))}
+                    ))} */}
             </div>
         </div>
     )

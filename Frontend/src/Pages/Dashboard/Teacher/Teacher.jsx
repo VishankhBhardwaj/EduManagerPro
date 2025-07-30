@@ -2,9 +2,12 @@ import React, { useState } from 'react'
 import Navbar from '../../../Components/navbar'
 import TeacherProfile from './TeacherProfile';
 import TeacherSchedule from './TeacherSchedule';
+import { FaCodePullRequest } from "react-icons/fa6";
+
 import { FaUser, FaBook, FaCalendarAlt } from 'react-icons/fa';
 import 'animate.css'
 import MyStudents from './MyStudents';
+import StudyRequest from './StudyRequest';
 const Teacher = () => {
     const [tab, setTab] = useState('Profile');
 
@@ -13,7 +16,7 @@ const Teacher = () => {
             <Navbar />
             <div className='w-full min-h-screen p-4 flex flex-col space-y-3 md:p-10'>
                 <div className='w-full flex flex-row bg-[#f4f4f5] rounded-md border-2 border-green-300'>
-                    <ul className='flex flex-row gap-2 justify-evenly p-1 w-full'>
+                    <ul className='flex flex-row gap-2 justify-evenly p-1 w-full flex-wrap md:flex-nowrap'>
                         <li
                             onClick={() => setTab('Profile')}
                             className={`p-2 w-[30%] md:w-[35%] text-center font-bold rounded-lg text-gray-500 cursor-pointer transition-all duration-200 ${tab === 'Profile' ? 'bg-white shadow-xl text-green-400' : 'bg-[#f4f4f5]'
@@ -44,12 +47,23 @@ const Teacher = () => {
                                 Schedule
                             </div>
                         </li>
+                        <li
+                            onClick={() => setTab('Requests')}
+                            className={`p-2 w-[30%] md:w-[35%] text-center font-bold rounded-lg text-gray-500 cursor-pointer transition-all duration-200 ${tab === 'Requests' ? 'bg-white shadow-xl text-green-400' : 'bg-[#f4f4f5]'
+                                }`}
+                        >
+                            <div className="flex items-center justify-center gap-2">
+                                <FaCodePullRequest />
+                                Requests
+                            </div>
+                        </li>
                     </ul>
                 </div>
                 <div className='h-[100%]'>
                     {tab === 'Profile' ? <TeacherProfile /> : ''}
                     {tab === 'Courses' ? <MyStudents/> : ''}
                     {tab === 'Schedule' ? <TeacherSchedule /> : ''}
+                    {tab === 'Requests'? <StudyRequest/>:''}
                 </div>
             </div>
         </div>
