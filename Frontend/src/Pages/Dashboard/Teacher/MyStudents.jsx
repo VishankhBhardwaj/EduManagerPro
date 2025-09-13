@@ -27,34 +27,57 @@ const MyStudents = () => {
     }, []);
     
     return (
-        <div className='flex flex-col p-3 gap-4 w-full h-full bg-white rounded-md shadow-2xl animate__animated animate__fadeIn'>
-            <div className="bg-white rounded-xl shadow p-6  mx-auto w-full">
-                <div className="flex justify-between items-center mb-6">
+        <div className='flex flex-col p-2 sm:p-3 lg:p-3 gap-4 w-full h-full bg-white rounded-md shadow-2xl animate__animated animate__fadeIn'>
+            <div className="bg-white rounded-xl shadow p-3 sm:p-4 lg:p-6 mx-auto w-full">
+                <div className="flex justify-between items-center mb-4 sm:mb-6">
                     <div>
-                        <h1 className="text-2xl font-bold">My Students</h1>
-                        <p className="text-gray-500 text-sm">Students under your supervision</p>
+                        <h1 className="text-xl sm:text-2xl font-bold">My Students</h1>
+                        <p className="text-gray-500 text-xs sm:text-sm">Students under your supervision</p>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-4 font-semibold text-gray-500 border-b pb-2 mb-2">
-                    <div className='text-center text-xs md:text-xl'>Student</div>
-                    <div className='text-center text-xs md:text-xl'>Grade</div>
-                    <div className='text-center text-xs md:text-xl'>Email</div>
-                    <div className='text-center text-xs md:text-xl'>Present</div>
-                </div>
-                {
-                    attendanceRecord.map((record, index) => (
-                        <div key={index} className="grid grid-cols-4 font-semibold text-gray-500 border-b pb-2 mb-2">
-                            <div className='text-center text-xs whitespace-nowrap md:text-xl sm:break-words sm:max-w-[150px] md:max-w-[450px]'>{record.student.FullName || 'N/A'}</div>
-                            <div className='text-center text-xs md:text-xl'>{record.student.Grade || 'N/A'}</div>
-                            <div className='text-center text-xs md:text-xl whitespace-nowrap  sm:break-words sm:max-w-[150px] md:max-w-[450px]'>
+                {/* Mobile Layout */}
+                <div className="block sm:hidden">
+                    {attendanceRecord.map((record, index) => (
+                        <div key={index} className="bg-gray-50 rounded-lg p-3 mb-3 border">
+                            <div className="flex justify-between items-start mb-2">
+                                <h3 className="font-semibold text-sm text-gray-900 break-words">
+                                    {record.student.FullName || 'N/A'}
+                                </h3>
+                                <span className="text-xs text-gray-500">Grade: {record.student.Grade || 'N/A'}</span>
+                            </div>
+                            <div className="text-xs text-gray-600 mb-2 break-all">
                                 {record.student.Email || 'N/A'}
                             </div>
-
-                            <div className='text-center text-xs md:text-xl'>{record.present || 'N/A'}</div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-xs text-gray-500">Present:</span>
+                                <span className="text-xs font-semibold">{record.present || 'N/A'}</span>
+                            </div>
                         </div>
-                    ))
-                }
+                    ))}
+                </div>
+
+                {/* Tablet and Desktop Layout */}
+                <div className="hidden sm:block">
+                    <div className="grid grid-cols-4 font-semibold text-gray-500 border-b pb-2 mb-2">
+                        <div className='text-center text-sm sm:text-base lg:text-xl'>Student</div>
+                        <div className='text-center text-sm sm:text-base lg:text-xl'>Grade</div>
+                        <div className='text-center text-sm sm:text-base lg:text-xl'>Email</div>
+                        <div className='text-center text-sm sm:text-base lg:text-xl'>Present</div>
+                    </div>
+                    {attendanceRecord.map((record, index) => (
+                        <div key={index} className="grid grid-cols-4 font-semibold text-gray-500 border-b pb-2 mb-2 items-center">
+                            <div className='text-center text-sm sm:text-base lg:text-xl px-1'>
+                                <span className="break-words">{record.student.FullName || 'N/A'}</span>
+                            </div>
+                            <div className='text-center text-sm sm:text-base lg:text-xl'>{record.student.Grade || 'N/A'}</div>
+                            <div className='text-center text-sm sm:text-base lg:text-xl px-1'>
+                                <span className="break-all">{record.student.Email || 'N/A'}</span>
+                            </div>
+                            <div className='text-center text-sm sm:text-base lg:text-xl'>{record.present || 'N/A'}</div>
+                        </div>
+                    ))}
+                </div>
                 {/* {request
                     .filter(student => student.status === 'pending')
                     .map((student, index) => (

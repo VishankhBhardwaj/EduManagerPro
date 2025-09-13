@@ -45,12 +45,12 @@ const StudentRegister = () => {
     }
     return (
         <>
-            <div className='animate__animated animate__fadeIn  w-full flex flex-col p-2 h-[100vh] overflow-y-auto gap-3 md:gap-10 bg-[#e8ebee] md:items-center'>
-                <div className='md:w-[30%] w-full flex flex-row gap-2 '>
+            <div className='animate__animated animate__fadeIn  w-full flex flex-col p-2 h-[100vh] overflow-y-auto gap-3 sm:gap-6 md:gap-10 bg-[#e8ebee] sm:items-center md:items-center'>
+                <div className='sm:w-[50%] md:w-[30%] w-full flex flex-row gap-2 '>
                     <IoMdArrowBack className='text-xl relative top-[3px] text-blue-500 ' />
                     <Link className='text-blue-500' to='/'>Back To Home</Link>
                 </div>
-                <div className='shadow-2xl bg-white min-h-[900px] md:min-h-[130%] flex-1 rounded-md flex flex-col gap-3 md:gap-7 items-center md:w-[30%]'>
+                <div className='shadow-2xl bg-white min-h-[900px] sm:min-h-[950px] md:min-h-[130%] flex-1 rounded-md flex flex-col gap-3 sm:gap-5 md:gap-7 items-center sm:w-[50%] md:w-[30%]'>
                     <div className='w-full h-[15%] flex flex-row items-center justify-center'>
                         <div className="bg-gradient-to-r from-blue-600 to-green-500 rounded-full p-4 inline-flex items-center justify-center">
                             <PiStudentThin className="text-5xl text-white" />
@@ -60,11 +60,11 @@ const StudentRegister = () => {
                         <h1 className='text-2xl font-bold'>Student Portal</h1>
                         <p className='text-gray-500 font-thin'>Register to access your learning dashboard</p>
                     </div>
-                    <div className='w-full flex flex-col p-3 gap-1 h-[50%] md:h-[42%] md:p-4'>
+                    <div className='w-full flex flex-col p-3 gap-1 h-[50%] sm:h-[45%] md:h-[42%] sm:p-4 md:p-4'>
                         <label>Full Name</label>
                         <input
                             type="text"
-                            className='border-2 border-gray-200 h-[30%] md:h-[35%] p-2 rounded-md'
+                            className='border-2 border-gray-200 h-[30%] sm:h-[32%] md:h-[35%] p-2 rounded-md'
                             placeholder='Enter your full name'
                             value={fullName}
                             onChange={e => setFullName(e.target.value)}
@@ -73,7 +73,7 @@ const StudentRegister = () => {
                         <label>Phone Number</label>
                         <input
                             type="text"
-                            className='border-2 border-gray-200 h-[30%] md:h-[35%] p-2 rounded-md'
+                            className='border-2 border-gray-200 h-[30%] sm:h-[32%] md:h-[35%] p-2 rounded-md'
                             placeholder='Enter your phone number'
                             value={phoneNumber}
                             onChange={e => setPhoneNumber(e.target.value)}
@@ -82,7 +82,7 @@ const StudentRegister = () => {
                         <label>Email Address</label>
                         <input
                             type="text"
-                            className='border-2 border-gray-200 h-[30%] md:h-[35%] p-2 rounded-md'
+                            className='border-2 border-gray-200 h-[30%] sm:h-[32%] md:h-[35%] p-2 rounded-md'
                             placeholder='Teacher@school.edu'
                             value={email}
                             onChange={e => setEmail(e.target.value)}
@@ -91,14 +91,14 @@ const StudentRegister = () => {
                         <label>Password</label>
                         <input
                             type="password"
-                            className='border-2 border-gray-200 h-[30%] md:h-[35%] p-2 rounded-md'
+                            className='border-2 border-gray-200 h-[30%] sm:h-[32%] md:h-[35%] p-2 rounded-md'
                             placeholder='Enter Your Password'
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                         />
                         <label>Gender</label>
                         <select
-                            className='border-2 border-gray-200 h-[30%] md:h-[35%] p-2 rounded-md'
+                            className='border-2 border-gray-200 h-[30%] sm:h-[32%] md:h-[35%] p-2 rounded-md'
                             value={gender}
                             onChange={e => setGender(e.target.value)}
                         >
@@ -112,21 +112,21 @@ const StudentRegister = () => {
                         <input
                             type="file"
                             accept="image/*"
-                            className='border-2 border-gray-200 h-[30%] md:h-[35%] p-2 rounded-md'
+                            className='border-2 border-gray-200 h-[30%] sm:h-[32%] md:h-[35%] p-2 rounded-md cursor-pointer'
                             onChange={handleFilechange}
                         />
                     </div>
                     {picture && (
-                            <div className="flex justify-center items-center w-full py-18 h-[10%] md:h-[100px] relative md:mb-[10px]">
+                            <div className="flex justify-center items-center w-full py-18 h-[10%] sm:h-[8%] md:h-[100px] relative sm:mb-[8px] md:mb-[10px] animate_animated animate__lightSpeedInLeft">
                                 <img
                                     src={picture}
                                     alt="Uploaded Preview"
-                                    style={{ width: '200px', height: 'auto', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
-                                    className="border border-gray-300 absolute md:top-[20px] md:mb-[10px]"
+                                    style={{ width: '140px', height: 'auto', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+                                    className="border border-gray-300 sm:w-[180px] md:w-[200px] absolute sm:top-[25px] md:top-[35px] md:mb-[10px] animate_animated animate__lightSpeedInLeft"
                                 />
                             </div>
                         )}
-                    <div className='h-[15%] flex flex-col w-[90%] md:w-[92%] justify-center items-center border-b-2 border-gray-300 pb-3'>
+                    <div className='h-[15%] flex flex-col w-[90%] sm:w-[85%] md:w-[92%] justify-center items-center border-b-2 border-gray-300 pb-3'>
                         <button onClick={HandleRegister} className='border-2 border-green-200 w-full h-[40%] rounded-md bg-green-600 text-white hover:bg-green-700 transition-all duration-200'>
                             Sign Up
                         </button>
@@ -142,7 +142,7 @@ const StudentRegister = () => {
                         <p>Need help accessing your account? <Link className='text-green-700'>Contact IT support</Link></p>
                     </div>
                 </div>
-                <div className='md:w-[30%]'>
+                <div className='sm:w-[50%] md:w-[30%]'>
                     <img className='rounded-md ' src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" />
                 </div>
             </div>
