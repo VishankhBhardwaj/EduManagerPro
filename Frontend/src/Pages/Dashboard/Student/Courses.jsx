@@ -1,6 +1,9 @@
 import React from 'react'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import 'animate.css'
+import axios from 'axios'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 const Courses = () => {
     const allCourses = [
         "Mathematics",
@@ -17,6 +20,38 @@ const Courses = () => {
         "Spanish"
     ]
     const [selectedCourses, setSelectedCourses] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    // Fetch current student subjects on component mount
+    useEffect(() => {
+        const fetchStudentData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://localhost:7000/api/showStudentData/studentData', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                
+                console.log('Student data response:', response.data); // Debug log
+                
+                // Set current subjects if they exist
+                // The response.data is the student object directly
+                if (response.data.Subjects && response.data.Subjects.length > 0) {
+                    // Subjects is an array of arrays, so get the first array
+                    const currentSubjects = response.data.Subjects[0] || [];
+                    setSelectedCourses(Array.isArray(currentSubjects) ? currentSubjects : []);
+                }
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+                // Don't show error toast immediately, just log it
+                // The user might not have any subjects set yet
+                console.log('No existing subjects found or error loading data');
+            }
+        };
+        
+        fetchStudentData();
+    }, []);
 
     const handleCourseChange = (course) => {
         if (selectedCourses.includes(course)) {
@@ -25,6 +60,29 @@ const Courses = () => {
         } else {
             // Add new course
             setSelectedCourses([...selectedCourses, course]);
+        }
+    };
+
+    const handleUpdateCourses = async () => {
+        setLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(
+                'http://localhost:7000/api/student/update-subjects',
+                { subjects: [selectedCourses] }, // Wrapping in array as per schema
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            
+            toast.success(response.data.msg || 'Courses updated successfully!');
+        } catch (error) {
+            console.error('Error updating courses:', error);
+            toast.error(error.response?.data?.msg || 'Failed to update courses');
+        } finally {
+            setLoading(false);
         }
     };
     return (
@@ -64,8 +122,29 @@ const Courses = () => {
                         </label>
                     ))}
                 </div>
-                <button className='w-full bg-black h-[40px] md:w-[40%] text-white rounded-lg'>Update Course Selection</button>
+                <button 
+                    onClick={handleUpdateCourses}
+                    disabled={loading}
+                    className={`w-full h-[40px] md:w-[40%] text-white rounded-lg transition-all duration-200 ${
+                        loading 
+                            ? 'bg-gray-400 cursor-not-allowed' 
+                            : 'bg-black hover:bg-gray-800'
+                    }`}
+                >
+                    {loading ? 'Updating...' : 'Update Course Selection'}
+                </button>
             </div>
+            <ToastContainer 
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     )
 }

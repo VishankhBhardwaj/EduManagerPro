@@ -9,6 +9,7 @@ const Navbar = () => {
         const [loggedIn,setLoggedIn] = useState(false);
         useEffect(()=>{
                 const token = localStorage.getItem('token');
+                const isStudent = localStorage.getItem('student');
                 if (token) {
                         setLoggedIn(true);
                 } else {
@@ -38,7 +39,7 @@ return (
                                 </>
                         ) : (
                                 <>
-                                        <button onClick={()=>navigate('/Teacher')} className='bg-gradient-to-r from-blue-600 to-green-500  text-white w-[70%] md:w-[30%] rounded-md shadow-md hover:opacity-90 transition-all duration-200 hover:shadow-2xl lg:ml-[300px]'
+                                        <button onClick={()=>isStudent?navigate('/student'):navigate('/Teacher')} className='bg-gradient-to-r from-blue-600 to-green-500  text-white w-[70%] md:w-[30%] rounded-md shadow-md hover:opacity-90 transition-all duration-200 hover:shadow-2xl lg:ml-[300px]'
                                         >Dashboard</button>
                                         <button
                                                 onClick={() => {

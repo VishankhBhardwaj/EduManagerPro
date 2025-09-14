@@ -21,6 +21,22 @@ const TeacherSchedule = () => {
         setattendanceWindow(true);
     }
 }, [scheduleData]);
+
+    // Function to fetch schedules data
+    const fetchSchedules = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.get('http://localhost:7000/api/showSchedule/AllSchedules', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            setAllSchedules(res.data);
+        } catch (err) {
+            console.error("Error fetching schedules:", err);
+        }
+    };
+
     async function handleClick() {
         try {
             const token = localStorage.getItem('token');
@@ -40,27 +56,21 @@ const TeacherSchedule = () => {
             );
             toast(response?.data?.msg);
             setIsOpen(false);
+            // Clear form fields
+            setDay('');
+            setSubjectName('');
+            setStartTime('');
+            setEndTime('');
+            // Refetch schedules after successful addition
+            await fetchSchedules();
         } catch (error) {
             toast(error.response?.data?.msg || error.message || "An error occurred");
             console.error('Error:', error.response?.data || error.message);
         }
     }
+    
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const res = await axios.get('http://localhost:7000/api/showSchedule/AllSchedules', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                setAllSchedules(res.data);
-            } catch (err) {
-                console.error("Error fetching schedules:", err);
-            }
-        };
-
-        fetchData();
+        fetchSchedules();
     }, []);
     return (
         <>

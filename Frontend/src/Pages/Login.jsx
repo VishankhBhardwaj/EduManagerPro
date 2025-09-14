@@ -19,6 +19,7 @@ const Login = () => {
                 Password: Password
             });
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('student', false);
             toast(response.data.msg);
             navigate('/Teacher');
         } catch (error) {

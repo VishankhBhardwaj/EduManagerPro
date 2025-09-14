@@ -418,3 +418,45 @@ exports.allAssignments = async (req,res)=>{
         });
     }
 }
+
+// Update student subjects
+exports.updateStudentSubjects = async (req, res) => {
+    try {
+        const studentId = req.userId; // Get student ID from authenticated user
+        const { subjects } = req.body; // Get subjects array from request body
+
+        // Validate if subjects is provided and is an array
+        if (!subjects || !Array.isArray(subjects)) {
+            return res.status(400).json({ 
+                msg: "Subjects array is required" 
+            });
+        }
+
+        // Find and update the student's subjects
+        const updatedStudent = await studentModel.findByIdAndUpdate(
+            studentId,
+            { Subjects: subjects },
+            { 
+                new: true, // Return the updated document
+                runValidators: true // Run schema validators
+            }
+        ).select('-Password'); // Exclude password from response
+
+        if (!updatedStudent) {
+            return res.status(404).json({ 
+                msg: "Student not found" 
+            });
+        }
+
+        return res.status(200).json({
+            msg: "Subjects updated successfully",
+            student: updatedStudent
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            msg: 'Server Error',
+            err: error.message || error
+        });
+    }
+}

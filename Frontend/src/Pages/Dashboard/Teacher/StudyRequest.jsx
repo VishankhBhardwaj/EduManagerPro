@@ -5,27 +5,34 @@ import { IoMdCheckmark } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 const StudyRequest = () => {
     const [request, setRequest] = useState([]);
+
+    // Function to fetch requests data
+    const fetchRequests = async () => {
+        try {
+            const res = await axios.get('http://localhost:7000/api/requests/fetchRequests', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setRequest(res.data);
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
     const handleApproval = async (approval, studentId) => {
-            try {
-                const token = localStorage.getItem('token');
-                const res = await axios.post('http://localhost:7000/api/requests/approval', { approval, studentId }, { headers: { Authorization: `Bearer ${token}` } });
-            } catch (error) {
-                console.log(error.message);
-            }
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.post('http://localhost:7000/api/requests/approval', { approval, studentId }, { headers: { Authorization: `Bearer ${token}` } });
+            
+            // Refetch requests after successful approval/rejection
+            await fetchRequests();
+        } catch (error) {
+            console.log(error.message);
         }
+    }
+
     useEffect(() => {
-        const fetchRequests = async () => {
-            try {
-                const res = await axios.get('http://localhost:7000/api/requests/fetchRequests', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                setRequest(res.data);
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
         fetchRequests();
     }, []);
   return (

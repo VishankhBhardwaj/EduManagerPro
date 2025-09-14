@@ -93,12 +93,15 @@ const Assignment = ({ setAssignmentWindow, scheduleData }) => {
                         <div className="mt-6">
                             <h2 className="text-xl font-semibold text-gray-900">Teacher Materials</h2>
                             <div className="mt-4 space-y-3">
-                                {assignments.map((assignment) => (
-                                    <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+                                {assignments.map((assignment, index) => (
+                                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors">
                                         <div className="flex items-center gap-3">
                                             <FileText className='text-blue-500'/>
                                             <div>
-                                                <p className="font-medium text-gray-800">{assignment.description}</p>
+                                                <p className="font-medium text-gray-800">{extractFileName(assignment.file)}</p>
+                                                {assignment.description && (
+                                                    <p className="text-sm text-gray-600">{assignment.description}</p>
+                                                )}
                                             </div>
                                         </div>
                                         <a href={`http://localhost:7000/public/Uploads/Assignments/${extractFileName(assignment.file)}`}>
