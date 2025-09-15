@@ -33,9 +33,11 @@ const StudentLogin = () => {
             const response = await axios.post('http://localhost:7000/api/student/recovery', {
                 Email: Email
             });
-            localStorage.setItem('token', response.data.token);
             toast(response.data.msg);
-            navigate('/Student');
+            setTimeout(() => {
+                setForgetPassword(false);
+            }, 2000);
+            navigate('/');
         } catch (error) {
             toast(error.response?.data?.msg || error.message || "An error occurred");
             console.error('Error:', error.response?.data || error.message);

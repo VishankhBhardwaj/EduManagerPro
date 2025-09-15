@@ -62,7 +62,7 @@ const Home = () => {
 
 
         <div className='w-full flex flex-col md:flex-row md:justify-evenly p-6 bg-gray-50 gap-4'>
-          {/* Card 1 */}
+          
           <div className="w-full md:w-[22%] h-[350px] md:h-[300px] rounded-md bg-[#e5f0ff] flex flex-col items-center text-center gap-5 p-3 shadow-sm hover:shadow-2xl transition-all duration-300">
             <div className='bg-[#2a69ed] w-[25%] h-[30%] md:w-[30%] md:h-[35%] rounded-full flex items-center justify-center'>
               <PiStudentThin className='text-5xl text-white' />
@@ -71,7 +71,7 @@ const Home = () => {
             <p className='text-gray-400  text-2xl'>Track attendance, grades, and student progress with comprehensive analytics.</p>
           </div>
 
-          {/* Card 2 */}
+          
           <div className="w-full md:w-[22%] h-[350px] md:h-[300px] rounded-md bg-[#e6fded] flex flex-col items-center text-center gap-5 p-3 shadow-sm hover:shadow-2xl transition-all duration-300">
             <div className='bg-[#18a84d] w-[25%] h-[30%] md:w-[30%] md:h-[35%] rounded-full flex items-center justify-center'>
               <PiBookOpenThin className='text-5xl text-white' />
@@ -80,7 +80,7 @@ const Home = () => {
             <p className='text-gray-400 text-2xl'>Organize lessons and subjects efficiently with tailored curriculum tools.</p>
           </div>
 
-          {/* Card 3 */}
+          
           <div className="w-full md:w-[22%] h-[350px] md:h-[300px] rounded-md bg-[#f5edff] flex flex-col items-center text-center gap-5 p-3 shadow-sm hover:shadow-2xl transition-all duration-300">
             <div className='bg-[#9638ec] w-[25%] h-[30%] md:w-[30%] md:h-[35%] rounded-full flex items-center justify-center'>
               <SlCalender className='text-5xl text-white' />
@@ -89,7 +89,7 @@ const Home = () => {
             <p className='text-gray-400 text-2xl'>Manage exams, holidays, and events with the integrated calendar system.</p>
           </div>
 
-          {/* Card 4 */}
+          
           <div className="w-full md:w-[22%] h-[350px] md:h-[300px] rounded-md bg-[#ffefdb] flex flex-col items-center text-center gap-5 p-3 shadow-sm hover:shadow-2xl transition-all duration-300">
             <div className='bg-[#ed5d0e] w-[25%] h-[30%] md:w-[30%] md:h-[35%] rounded-full flex items-center justify-center'>
               <PiMedalThin className='text-5xl text-white' />
